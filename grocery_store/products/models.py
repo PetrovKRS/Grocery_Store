@@ -28,7 +28,7 @@ class Category(models.Model):
 
     )
     image = models.ImageField(
-        upload_to='media/products/category/',
+        upload_to='products/category/',
         blank=True,
         verbose_name='Изображение товара',
     )
@@ -72,7 +72,7 @@ class SubCategory(models.Model):
 
     )
     image = models.ImageField(
-        upload_to='media/products/category/subcategory/',
+        upload_to='products/category/subcategory/',
         blank=True,
         verbose_name='Изображение товара',
     )
@@ -116,17 +116,17 @@ class Product(models.Model):
 
     )
     image_size_a = models.ImageField(
-        upload_to='media/products/category/subcategory/',
+        upload_to='products/category/subcategory/',
         blank=True,
         verbose_name='Изображение товара',
     )
     image_size_b = models.ImageField(
-        upload_to='media/products/category/subcategory/',
+        upload_to='products/category/subcategory/',
         blank=True,
         verbose_name='Изображение товара',
     )
     image_size_c = models.ImageField(
-        upload_to=',=media/products/category/subcategory/',
+        upload_to='products/category/subcategory/',
         blank=True,
         verbose_name='Изображение товара',
     )
