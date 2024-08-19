@@ -150,7 +150,7 @@ class Product(models.Model):
 
 
 class ShoppingCart(models.Model):
-    """ Shopping cart model. """
+    """ Модель корзины. """
 
     user = models.ForeignKey(
         User,
@@ -244,7 +244,8 @@ def create_shopping_cart(sender, **kwargs):
 @receiver([post_save, post_delete], sender=ShoppingCartItem)
 def update_shopping_cart_total_price_count(sender, **kwargs):
     """ Автоматическое обновление общего количества
-        товаров и их суммарной стоймости в корзине. """
+        товаров и их суммарной стоймости в корзине при
+        изменении кол-ва. """
 
     shopping_cart_item = kwargs['instance']
     shopping_cart = ShoppingCart.objects.get(

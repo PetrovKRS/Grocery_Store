@@ -17,7 +17,7 @@ router.register(r'products', ProductViewSet, basename='products')
 router.register(r'shopping_cart', ShoppingCartViewSet, basename='shopping_cart')
 router.register(
    r'shopping_cart/(?P<shopping_cart_id>\d+)/shopping_cart_item',
-   ShoppingCartItemViewSet, basename='cart_item'
+   ShoppingCartItemViewSet, basename='shopping_cart_item'
 )
 
 urlpatterns = [

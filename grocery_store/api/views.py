@@ -42,19 +42,12 @@ class ProductViewSet(
 
 
 class ShoppingCartViewSet(
-    mixins.ListModelMixin, viewsets.GenericViewSet):
+    mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """ Получение списка товаров в корзине пользователя. """
 
+    queryset = ShoppingCart.objects.all()
     serializer_class = ShoppingCartSerializer
     permission_classes = (IsShoppingCartOwner,)
-
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_authenticated:
-            return ShoppingCart.objects.filter(
-                user=user
-            )
-        return []
 
 
 class ShoppingCartItemViewSet(
@@ -68,7 +61,7 @@ class ShoppingCartItemViewSet(
     def get_queryset(self):
         shopping_cart = get_object_or_404(
             ShoppingCart, id=self.kwargs.get('shopping_cart_id'))
-        queryset = shopping_cart.cart_items.all()
+        queryset = shopping_cart.shopping_cart_items.all()
         return queryset
 
     def perform_create(self, serializer):

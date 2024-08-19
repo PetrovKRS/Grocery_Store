@@ -55,13 +55,32 @@ class ProductSerializer(serializers.ModelSerializer):
         return obj.subcategory.category.name
 
 
+class ShoppingCartItemProductSerializer(serializers.ModelSerializer):
+    """ """
+
+    product = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ShoppingCartItem
+        fields = ('product', 'count', 'price')
+
+    def get_product(self, obj):
+        return ProductSerializer(
+            Product.objects.filter(
+                id=obj.product.id
+            ),
+            context=self.context,
+            many=True
+        ).data
+
+
 class ShoppingCartItemSerializer(serializers.ModelSerializer):
     """ Подготовка данных для добавления/удаления товара,
         изменение кол-ва товара. """
 
     shopping_cart = serializers.PrimaryKeyRelatedField(
         queryset=ShoppingCart.objects.all(),
-        required=False,
+        required=False
     )
 
     class Meta:
@@ -126,7 +145,8 @@ class ShoppingCartItemSerializer(serializers.ModelSerializer):
 
 
 class ShoppingCartSerializer(serializers.ModelSerializer):
-    """ """
+    """ Список товаров в корзине пользователя с указанием общего
+        кол-ва товаров и их суммарной стоймости. """
 
     products = serializers.SerializerMethodField()
 
@@ -137,8 +157,8 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         )
 
     def get_products(self, obj):
-        return ShoppingCartItemSerializer(
-            ShoppingCart.objects.filter(
+        return ShoppingCartItemProductSerializer(
+            ShoppingCartItem.objects.filter(
                 shopping_cart=obj,
             ),
             context=self.context,
