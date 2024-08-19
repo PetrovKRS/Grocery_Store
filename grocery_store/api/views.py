@@ -66,13 +66,13 @@ class ShoppingCartItemViewSet(
 
     def perform_create(self, serializer):
         serializer.save(
-            cart_id=self.kwargs.get('shopping_cart_id')
+            shopping_cart_id=self.kwargs.get('shopping_cart_id')
         )
 
     def create(self, request, *args, **kwargs):
         """ Добавление продукта в корзину. """
 
-        request.data['cart'] = self.kwargs.get('shopping_cart_id')
+        request.data['shopping_cart'] = self.kwargs.get('shopping_cart_id')
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

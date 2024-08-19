@@ -86,7 +86,7 @@ class ShoppingCartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoppingCartItem
         fields = (
-            'shopping_cart', 'product', 'count', 'price',
+            'shopping_cart', 'product', 'count',
         )
 
     def validate(self, data):
@@ -95,7 +95,7 @@ class ShoppingCartItemSerializer(serializers.ModelSerializer):
 
         request = self.context.get('request')
         if request.method == 'POST':
-            if ShoppingCart.objects.filter(
+            if ShoppingCartItem.objects.filter(
                 shopping_cart=data.get('shopping_cart'),
                 product=data.get('product')
             ).exists():
@@ -109,11 +109,13 @@ class ShoppingCartItemSerializer(serializers.ModelSerializer):
                     'должно быть больше нуля!'
                 )
             return data
+        return data
+
 
     def create(self, validated_data):
         """ Добавление нового товара в корзину. """
 
-        shopping_cart = ShoppingCart.get(
+        shopping_cart = ShoppingCart.objects.get(
             id=validated_data.get('shopping_cart_id')
         )
         product = validated_data.get('product')
@@ -135,7 +137,7 @@ class ShoppingCartItemSerializer(serializers.ModelSerializer):
         product = Product.objects.get(
             id=instance.product.id
         )
-        instance.count += count
+        instance.count = count
         instance.price = product.price * instance.count
         if instance.count <= 0:
             instance.delete()
