@@ -56,7 +56,7 @@ class ShoppingCartItemViewSet(
     """ Добавление, изменение, удаление товаров в корзине. """
 
     serializer_class = ShoppingCartItemSerializer
-    Permission_classes = (AllowAny,)
+    Permission_classes = (IsShoppingCartItemOwner,)
 
     def get_queryset(self):
         shopping_cart = get_object_or_404(
@@ -70,7 +70,8 @@ class ShoppingCartItemViewSet(
         )
 
     def create(self, request, *args, **kwargs):
-        """Добавить продукты в корзину"""
+        """ Добавление продукта в корзину. """
+
         request.data['cart'] = self.kwargs.get('shopping_cart_id')
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -81,7 +82,8 @@ class ShoppingCartItemViewSet(
         )
 
     def update(self, request, *args, **kwargs):
-        """Изменить количество продукта в корзине"""
+        """ Изменение кол-ва продукта в корзине. """
+
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(
@@ -96,7 +98,7 @@ class ShoppingCartItemViewSet(
         return Response(serializer.data)
 
     def delete(self, request, *args, **kwargs):
-        """ Очистка корзины."""
+        """ Очистка корзины. """
 
         instance = self.get_queryset()
         self.perform_destroy(instance)

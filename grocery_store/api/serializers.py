@@ -156,6 +156,11 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
             'products', 'total_count', 'total_coast',
         )
 
+    def validate(self, data):
+        user = self.context.get('request').user
+        if not user.is_authenticated:
+            raise ValidationError('Учетные данные не предоставлены!')
+
     def get_products(self, obj):
         return ShoppingCartItemProductSerializer(
             ShoppingCartItem.objects.filter(
