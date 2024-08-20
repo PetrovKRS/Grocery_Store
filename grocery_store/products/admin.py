@@ -2,7 +2,6 @@ from itertools import product
 
 from django.contrib import admin
 
-from grocery_store.settings import EMPTY_VALUE
 from products.models import (
     Category, SubCategory, Product, ShoppingCart,
     ShoppingCartItem,
