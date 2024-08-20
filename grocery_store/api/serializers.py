@@ -1,18 +1,10 @@
-from itertools import count, product
-from types import NoneType
-
-from attr.setters import validate
-from django.db.models.fields.files import ImageFieldFile
-from djoser.serializers import UserSerializer
-from rest_framework import exceptions, serializers
+from rest_framework import serializers
 
 from products.models import (
     Category, SubCategory, Product, ShoppingCart,
     ShoppingCartItem,
 )
 from rest_framework.exceptions import ValidationError
-from urllib3 import request
-from users.models import User
 
 
 class SubCategorySerializer(serializers.ModelSerializer):
@@ -124,7 +116,6 @@ class ShoppingCartItemSerializer(serializers.ModelSerializer):
                 )
             return data
         return data
-
 
     def create(self, validated_data):
         """ Добавление нового товара в корзину. """
