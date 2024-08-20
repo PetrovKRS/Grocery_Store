@@ -1,6 +1,8 @@
 from itertools import count, product
+from types import NoneType
 
 from attr.setters import validate
+from django.db.models.fields.files import ImageFieldFile
 from djoser.serializers import UserSerializer
 from rest_framework import exceptions, serializers
 
@@ -42,21 +44,33 @@ class ProductSerializer(serializers.ModelSerializer):
 
     category = serializers.SerializerMethodField()
     subcategory = serializers.StringRelatedField()
+    image_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = (
             'name', 'slug', 'category', 'subcategory',
-            'price', 'image_size_a', 'image_size_b',
-            'image_size_c',
+            'price', 'image_list',
         )
 
     def get_category(self, obj):
         return obj.subcategory.category.name
 
+    def get_image_list(self, obj):
+        """ Получаем список изображений товара. """
+
+        image_list = []
+        try: image_list.append(obj.image_size_a.url)
+        except ValueError: image_list.append('Null')
+        try: image_list.append(obj.image_size_b.url)
+        except ValueError: image_list.append('Null')
+        try: image_list.append(obj.image_size_c.url)
+        except ValueError: image_list.append('Null')
+        return image_list
+
 
 class ShoppingCartItemProductSerializer(serializers.ModelSerializer):
-    """ """
+    """ Список товаров в корзине с общим кол-вом и общей ценой. """
 
     product = serializers.SerializerMethodField()
 
